@@ -16,7 +16,6 @@ class AnalyzeSisFall:
 		self.file_list = glob.glob(self.path)
 		self.__create_activity_list()
 		self.df = self.__convert_list_to_dataframe()
-		# print(self.df)
 
 # Private
 
@@ -34,20 +33,24 @@ class AnalyzeSisFall:
 		df = pd.DataFrame(self.activity_list, columns={'path':[1], 'subject':[2], 'activity':[3], 'trial':[4]})
 		return df
 
-	# def __convert_accel(self, data_frame):
+	def __convert_accel(self, data_frame):
+		data_frame['ax'] = data_frame['ax'] * 32.0 / 8192.0  # ax * 2 * scale / 2^resolution
+		data_frame['ay'] = data_frame['ay'] * 32.0 / 8192.0
+		data_frame['az'] = data_frame['az'] * 32.0 / 8192.0
+		data_frame['t'] = data_frame.index * 0.005
+		return data_frame
 
 # Public
 	def analyze_activities(self):
-		# print(self.df['path'])
 		for i, path in enumerate(self.df['path']):
-			accel = self.__load_data(path)
-			accel['ax'] = accel['ax'] * 32.0 / 8192.0 # ax * 2 * scale / 2^resolution
-			accel['ay'] = accel['ay'] * 32.0 / 8192.0
-			accel['az'] = accel['az'] * 32.0 / 8192.0
-			print(accel.describe())
+			accel = self.__convert_accel(self.__load_data(path))
+			#
+			# Call fall detection
+			#
+			print(accel.head(5))
+			print(accel.tail(5))
 
 
 if __name__ == '__main__':
 	AS = AnalyzeSisFall('C:/Dataset/SisFall_dataset/*/*.txt')
-	# print(AS.df)
 	AS.analyze_activities()

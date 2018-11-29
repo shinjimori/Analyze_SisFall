@@ -33,22 +33,34 @@ class AnalyzeSisFall:
 		df = pd.DataFrame(self.activity_list, columns={'path':[1], 'subject':[2], 'activity':[3], 'trial':[4]})
 		return df
 
-	def __convert_accel(self, data_frame):
-		data_frame['ax'] = data_frame['ax'] * 32.0 / 8192.0  # ax * 2 * scale / 2^resolution
-		data_frame['ay'] = data_frame['ay'] * 32.0 / 8192.0
-		data_frame['az'] = data_frame['az'] * 32.0 / 8192.0
-		data_frame['t'] = data_frame.index * 0.005
-		return data_frame
+	def __convert_accel(self, df):
+		df['ax'] = df['ax'] * 32.0 / 8192.0  # ax * 2 * scale / 2^resolution
+		df['ay'] = df['ay'] * 32.0 / 8192.0
+		df['az'] = df['az'] * 32.0 / 8192.0
+		df['t'] = df.index * 0.005
+		return df
+
+	def __sliding_window(self, df, i, window_size):
+			return df['ax'][i:i+window_size], df['ay'][i:i+window_size], df['az'][i:i+window_size]
+
+	def __generate_feature_c8(self, df):
+		max = 0
+		for i, v in enumerate(df['ax']):
+			if i < len(df['ax']) - 200:
+				axk, ayk, azk = self.__sliding_window(df, i, 200)
+				c8 = np.sqrt(np.square(np.std(axk)) + np.square(np.std(azk)))
+				if( c8 > max):
+					max = c8
+		return max
 
 # Public
 	def analyze_activities(self):
 		for i, path in enumerate(self.df['path']):
 			accel = self.__convert_accel(self.__load_data(path))
-			#
-			# Call fall detection
-			#
-			print(accel.head(5))
-			print(accel.tail(5))
+			c8 = self.__generate_feature_c8(accel)
+			#if(c8 >= 100):
+			print(path, c8)
+
 
 
 if __name__ == '__main__':

@@ -30,7 +30,7 @@ class AnalyzeSisFall:
 			self.activity_list.append([v, activity, subject, trial])
 
 	def __convert_list_to_dataframe(self):
-		df = pd.DataFrame(self.activity_list, columns={'path':[1], 'subject':[2], 'activity':[3], 'trial':[4]})
+		df = pd.DataFrame(self.activity_list, columns={'path':[1], 'activity':[2], 'subject':[3], 'trial':[4]})
 		return df
 
 	def __convert_accel(self, df):
@@ -48,9 +48,19 @@ class AnalyzeSisFall:
 		for i, v in enumerate(df['ax']):
 			if i < len(df['ax']) - 200:
 				axk, ayk, azk = self.__sliding_window(df, i, 200)
-				c8 = np.sqrt(np.square(np.std(axk)) + np.square(np.std(azk)))
-				if( c8 > max):
+				c8 = np.sqrt(np.var(axk) + np.var(azk))
+				if c8 > max:
 					max = c8
+		return max
+
+	def __generate_feature_c9(self, df):
+		max = 0
+		for i, v in enumerate(df['ax']):
+			if i < len(df['ax']) - 200:
+				axk, ayk, azk = self.__sliding_window(df, i, 200)
+				c9 = np.sqrt(np.var(axk) +np.var(ayk) + np.var(azk))
+				if c9 > max:
+					max = c9
 		return max
 
 # Public
@@ -60,7 +70,6 @@ class AnalyzeSisFall:
 			c8 = self.__generate_feature_c8(accel)
 			#if(c8 >= 100):
 			print(path, c8)
-
 
 
 if __name__ == '__main__':

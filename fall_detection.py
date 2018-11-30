@@ -26,6 +26,8 @@ class AnalyzeSisFall:
 	def __create_activity_list(self):
 		for i, v in enumerate(self.file_list):
 			label, ext = os.path.splitext(os.path.basename(v))
+			#print(label)
+			#a, b, c, d = label.split("/")
 			activity, subject, trial = label.split("_")
 			self.activity_list.append([v, activity, subject, trial])
 
@@ -65,11 +67,15 @@ class AnalyzeSisFall:
 
 # Public
 	def analyze_activities(self):
+		f = open('C:/Dataset/RESULT/C8_result.txt', 'a', encoding='utf-8')
 		for i, path in enumerate(self.df['path']):
-			accel = self.__convert_accel(self.__load_data(path))
+			#accel = self.__convert_accel(self.__load_data(path))
+			accel = self.__load_data(path)
 			c8 = self.__generate_feature_c8(accel)
+			output = self.df['activity'][i] + ',' + self.df['subject'][i] + ',' + self.df['trial'][i] + ',' + str(c8) + '\n'
 			#if(c8 >= 100):
-			print(path, c8)
+			f.write(output)
+		f.close()
 
 
 if __name__ == '__main__':

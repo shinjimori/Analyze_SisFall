@@ -7,6 +7,7 @@
 
 - Download [SisFall dataset](http://sistemic.udea.edu.co/en/investigacion/proyectos/english-falls/) 
 - Clone this repository
+- Fix path to dataset
 - Run fall_detection.py then generate C8_result.txt(it takes a few hour to generate in this ver.)
 - Run plot.py
 
@@ -16,3 +17,9 @@
 - numpy  >= 1.15.4
 - pandas >= 0.23.4
 - plotly >= 3.4.2
+
+# License
+
+* Copyright Shinji Omori
+* Released under the MIT license
+* Date: 2018-12-03:1123 JST

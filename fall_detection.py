@@ -3,8 +3,6 @@ import glob
 import os
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from pandas.tests.io.test_parquet import df_cross_compat
 
 
 class AnalyzeSisFall:

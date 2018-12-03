@@ -1,27 +1,25 @@
 # Analyze SisFall
 
-SisFall datasetを用いて、転倒検知・ヒヤリハット検知の評価を行う
+1. Reproduce SisFall C8 result.
+2. Test our algorithm
 
-# dependencies
+# Usage
+
+- Download [SisFall dataset](http://sistemic.udea.edu.co/en/investigacion/proyectos/english-falls/) 
+- Clone this repository
+- Fix path to dataset
+- Run fall_detection.py then generate C8_result.txt(it takes a few hour to generate in this ver.)
+- Run plot.py
+
+# Dependencies
 
 - python >= 3.6
 - numpy  >= 1.15.4
 - pandas >= 0.23.4
-- matplotlib >= 3.0.2
-- pytest >= 4.0.1
+- plotly >= 3.4.2
 
-# TODO
+# License
 
-- [ ] データセット読み込み
-    
-    - [ ] ファイル一覧取得
-    - [ ] ファイル名からラベル取得
-    - [ ] ラベルと動作名の辞書ファイル作成
-    - [ ] ラベルから動作取得
-    - [ ] ファイルから加速度データ取得
-    - [ ] 時刻追加
-    - [ ] 加速度データに対するラベリング処理
-- [ ] データセットの可視化
-- [ ] 転倒検知をPythonで実装
-- [ ] ヒヤリハット検知をPythonで実装
-- [ ] アルゴリズムの評価
+* Copyright Shinji Omori
+* Released under the MIT license
+* Date: 2018-12-03:1123 JST
